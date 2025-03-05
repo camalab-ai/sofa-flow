@@ -83,7 +83,6 @@ The implemented code corresponds to the infer (line 2) and select (line 3) steps
 
 As a result, we obtain data that is used to fine-tune the model for step k+1. Then, following the same method described above, we generate the dataset for training step k+2 using the model from step k+1. This iterative process continues, progressively adapting the model to the data in a streamed manner.
 
-**_________________________________________________________________________**
 
 
 # License
