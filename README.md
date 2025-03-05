@@ -42,6 +42,8 @@ Vident-real, a large dataset of 100 video sequences of intra-oral scenes from re
 * motion estimation
 * video stabilization
 
+Datasets can be downloaded from [Vident-synth](https://mostwiedzy.pl/pl/open-research-data/vident-synth-a-synthetic-intra-oral-video-dataset-for-optical-flow-estimation,104035052152797-0) and [Vident-real](https://mostwiedzy.pl/pl/open-research-data/vident-real-an-intra-oral-video-dataset-for-multi-task-learning,104032256156938-0)  
+
 ## Usage
 
 We provide scripts and code to evaluate and generate datasets for Streamed optical flow adaptation. The data generated in this way has been used in streamed training, and the proposed frame selection method can be applied to train any optical flow model.
