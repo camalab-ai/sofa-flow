@@ -150,7 +150,7 @@ if __name__ == '__main__':
     data = simulateData(i=2)
 
     # Initialize the TMI metrics
-    tmi_data = TMI_data(data)
+    tmi_data = TMI_data(data, T=300, t=1.0)
 
     # Print the metrics results
     print(tmi_data.metrics)
