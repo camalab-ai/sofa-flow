@@ -65,10 +65,10 @@ This script performs optical flow estimation for image sequences using the RAFT 
 Pre-trained models should be placed in the `checkpoints` folder. You can download them from [checkpoints](). Ensure that the correct model weights are available before running the script.
 ```shell
 # To run the script, use the following command:
-python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
+python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT train --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
 
 # Example usage
-python infer_flow.py --DEVICE cuda --DATA_PATH /DATASETS/Vident-real-100 --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR output_results
+python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /DATASETS/Vident-real-100 --SPLIT train --IMAGE_DIR GT --SAVE_DATASET_DIR output_results_RAFT_Sintel_C1
 ```
 
 How It Works
