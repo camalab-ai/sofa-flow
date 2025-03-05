@@ -48,12 +48,12 @@ We provide scripts and code to evaluate and generate datasets for Streamed optic
 
 **Metrics implementation**: 
 ```shell
-python3 infer_TMI_metrics.py
+python3 infer_metrics.py
 ```
 
 **Implementation of main class for metric computation and metric based optical flow selection**: 
 ```shell
-python3 infer_TMI_seq.py
+python3 infer_seq.py
 ```
 
 **Optical Flow Inference and data preparation for Streamed optical flow training**: 
@@ -63,10 +63,10 @@ This script performs optical flow estimation for image sequences using the RAFT 
 Pre-trained models should be placed in the `checkpoints` folder. You can download them from [checkpoints](). Ensure that the correct model weights are available before running the script.
 ```shell
 # To run the script, use the following command:
-python infer_flow_TMI.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
+python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
 
 # Example usage
-python infer_flow_TMI.py --DEVICE cuda --DATA_PATH /DATASETS/Vident-real-100 --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR output_results
+python infer_flow.py --DEVICE cuda --DATA_PATH /DATASETS/Vident-real-100 --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR output_results
 ```
 
 How It Works
