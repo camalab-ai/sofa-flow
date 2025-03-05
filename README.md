@@ -42,18 +42,20 @@ Vident-real, a large dataset of 100 video sequences of intra-oral scenes from re
 * motion estimation
 * video stabilization
 
+Datasets can be downloaded from [Vident-synth](https://mostwiedzy.pl/pl/open-research-data/vident-synth-a-synthetic-intra-oral-video-dataset-for-optical-flow-estimation,104035052152797-0) and [Vident-real](https://mostwiedzy.pl/pl/open-research-data/vident-real-an-intra-oral-video-dataset-for-multi-task-learning,104032256156938-0).  
+
 ## Usage
 
 We provide scripts and code to evaluate and generate datasets for Streamed optical flow adaptation. The data generated in this way has been used in streamed training, and the proposed frame selection method can be applied to train any optical flow model.
 
 **Metrics implementation**: 
 ```shell
-python3 infer_TMI_metrics.py
+python3 infer_metrics.py
 ```
 
 **Implementation of main class for metric computation and metric based optical flow selection**: 
 ```shell
-python3 infer_TMI_seq.py
+python3 infer_seq.py
 ```
 
 **Optical Flow Inference and data preparation for Streamed optical flow training**: 
@@ -63,10 +65,10 @@ This script performs optical flow estimation for image sequences using the RAFT 
 Pre-trained models should be placed in the `checkpoints` folder. You can download them from [checkpoints](). Ensure that the correct model weights are available before running the script.
 ```shell
 # To run the script, use the following command:
-python infer_flow_TMI.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
+python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /path/to/dataset --SPLIT train --IMAGE_DIR GT --SAVE_DATASET_DIR TMI_results
 
 # Example usage
-python infer_flow_TMI.py --DEVICE cuda --DATA_PATH /DATASETS/Vident-real-100 --SPLIT test --IMAGE_DIR GT --SAVE_DATASET_DIR output_results
+python infer_flow.py --DEVICE cuda --MODEL checkpoints/RAFT_Sintel.pth --DATA_PATH /DATASETS/Vident-real-100 --SPLIT train --IMAGE_DIR GT --SAVE_DATASET_DIR output_results_RAFT_Sintel_C1
 ```
 
 How It Works
@@ -75,8 +77,13 @@ How It Works
 3. The results are saved in the specified directory.
 4. The script generates and saves metric plots based on the results.
 
-Output files are stored in the directory specified by --SAVE_DATASET_DIR.
-**_________________________________________________________________________**
+![Algorithm:Streamed optical flow adaptation](vis/algo.png)
+
+The implemented code corresponds to the infer (line 2) and select (line 3) steps of the presented algorithm. Running the script `infer_flow.py` with the parameter `--DATA_PATH` will generate the dataset for the C1 variant and save the data in the `--SAVE_DATASET_PATH` folder. By default, the parameters are set to T=300 and t=1.0. The train step (line 4) of the algorithm, corresponding to step k, is executed using any model *F*, leveraging the original implementation of the model, such as RAFT. This allows for progressive adaptation of the model to the dataset. To perform streaming with our method, we need to select the path to the model from which the algorithm will be initialized, for example, `--MODEL = checkpoints/RAFT_Sintel.pth`, then choose the data source with `--DATA_PATH = '/DATASETS/Vident-real-100'`, specify the dataset split using `--SPLIT` train, and indicate the subfolder containing the images with `--IMAGE_DIR = 'GT'`. Additionally, we need to provide the name of the folder where the data for the next training step of the algorithm will be saved using `--SAVE_DATASET_PATH`.
+
+As a result, we obtain data that is used to fine-tune the model for step k+1. Then, following the same method described above, we generate the dataset for training step k+2 using the model from step k+1. This iterative process continues, progressively adapting the model to the data in a streamed manner.
+
+
 
 # License
 MIT License. See [LICENSE](LICENSE) file. 

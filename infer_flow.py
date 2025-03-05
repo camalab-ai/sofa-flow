@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from networks import loadModels, getOpticalFlow
-from infer_TMI_seq import TMI_data
+from infer_seq import SOFA_data
 
 def load_image(imfile):
     img = np.array(Image.open(imfile)).astype(np.uint8)
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('--DATA_PATH', help="data path", default='/home/emilia/DATASETS/Vident-real-100')
     parser.add_argument('--SPLIT', help="split", default='test')
     parser.add_argument('--IMAGE_DIR', help="image dir", default='GT')
-    parser.add_argument('--SAVE_DATASET_DIR', help="save dataset", default='test_TMI_data_C1')
+    parser.add_argument('--SAVE_DATASET_DIR', help="save dataset", default='test_data_C1')
 
 
     parser.add_argument('--small', action='store_true', help='use small model')
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     DATA_PATH = args.DATA_PATH # DATA_PATH = '/home/emilia/DATASETS/Vident-real-100'
     SPLIT = args.SPLIT # SPLIT = 'test'
     IMAGE_DIR = args.IMAGE_DIR # IMAGE_DIR = 'GT'
-    MODELS = [args.MODEL] # MODELS = ['GMA_Step4_50_50_MIX']
+    MODELS = [args.MODEL] # MODELS = ['GMA_Step4']
     models = loadModels(args, [args.MODEL], DEVICE)
 
     data_seq = glob.glob(os.path.join(DATA_PATH, SPLIT, '*'))
@@ -71,14 +71,14 @@ if __name__ == '__main__':
             'OF13': flow_f_13.permute(0, 2, 3, 1).cpu().numpy().astype(np.float32),
             'OF21': flow_b.permute(0, 2, 3, 1).cpu().numpy().astype(np.float32)})
 
-        print('TMI_data created ', seq)
-        tmi_data = TMI_data(data=infer_data_seq, model=args.MODEL, T=300, t=1.0)
+        print('SOFA_data created ', seq)
+        sofa_data = SOFA_data(data=infer_data_seq, model=args.MODEL, T=300, t=1.0)
 
-        print('Selecting frames C1...')
-        C1 = tmi_data.C1()
+        print('Selected frames C1...')
+        C1 = sofa_data.c1
 
-        print('Saving TMI_data...')
-        tmi_data.save_data(C1, args.SAVE_DATASET_DIR)
+        print('Saving SOFA_data...')
+        sofa_data.save_data(C1, args.SAVE_DATASET_DIR)
 
         print('Plotting metrics...')
-        tmi_data.plot_metrics(tmi_data.metrics, f'{args.SAVE_DATASET_DIR}/plot_{seq.split("/")[-1]}.png')
+        sofa_data.plot_metrics(sofa_data.metrics, f'{args.SAVE_DATASET_DIR}/plot_{seq.split("/")[-1]}.png')

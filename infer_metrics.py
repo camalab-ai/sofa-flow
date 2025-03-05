@@ -133,8 +133,6 @@ def image_warp(im, flow):
         warped: transformed image of the same shape as the input image.
     """
     with tf.compat.v1.variable_scope('image_warp'):
-    # with tf.variable_scope('image_warp'):
-
         num_batch, height, width, channels = tf.unstack(tf.shape(im))
         max_x = tf.cast(width - 1, 'int32')
         max_y = tf.cast(height - 1, 'int32')
@@ -147,7 +145,6 @@ def image_warp(im, flow):
         # Floor the flow, as the final indices are integers
         # The fractional part is used to control the bilinear interpolation.
 
-        # flow_floor = tf.to_int32(tf.floor(flow_flat))
         flow_floor = tf.cast(tf.floor(flow_flat), tf.int32)
         bilinear_weights = flow_flat - tf.floor(flow_flat)
 
