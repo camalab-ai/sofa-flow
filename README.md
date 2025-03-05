@@ -77,8 +77,14 @@ How It Works
 3. The results are saved in the specified directory.
 4. The script generates and saves metric plots based on the results.
 
-Output files are stored in the directory specified by --SAVE_DATASET_DIR.
+![Algorithm:Streamed optical flow adaptation](vis/algo.png)
+
+The implemented code corresponds to the infer (line 2) and select (line 3) steps of the presented algorithm. Running the script `infer_flow.py` with the parameter `--DATA_PATH` will generate the dataset for the C1 variant and save the data in the `--SAVE_DATASET_PATH` folder. By default, the parameters are set to T=300 and t=1.0. The train step (line 4) of the algorithm, corresponding to step k, is executed using any model $ \mathcal{F} $, leveraging the original implementation of the model, such as RAFT. This allows for progressive adaptation of the model to the dataset. To perform streaming with our method, we need to select the path to the model from which the algorithm will be initialized, for example, `--MODEL = checkpoints/RAFT_Sintel.pth`, then choose the data source with `--DATA_PATH = '/DATASETS/Vident-real-100'`, specify the dataset split using `--SPLIT` train, and indicate the subfolder containing the images with `--IMAGE_DIR = 'GT'`. Additionally, we need to provide the name of the folder where the data for the next training step of the algorithm will be saved using `--SAVE_DATASET_PATH`.
+
+As a result, we obtain data that is used to fine-tune the model for step k+1. Then, following the same method described above, we generate the dataset for training step k+2 using the model from step k+1. This iterative process continues, progressively adapting the model to the data in a streamed manner.
+
 **_________________________________________________________________________**
+
 
 # License
 MIT License. See [LICENSE](LICENSE) file. 
