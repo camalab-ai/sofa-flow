@@ -6,7 +6,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-from infer_TMI_metrics import t_metrics
+from infer_metrics import t_metrics
 
 # Simulate the data
 def simulateData(i=50):
@@ -27,7 +27,7 @@ def simulateData(i=50):
             'OF21': np.random.rand(1, 800, 800, 2).astype(np.float32)})
     return data
 
-class TMI_data():
+class SOFA_data():
     def __init__(self, data, model='model_name', T=300, t=1.0):
         self.model = model
         self.data = data
@@ -150,10 +150,10 @@ if __name__ == '__main__':
     data = simulateData(i=2)
 
     # Initialize the TMI metrics
-    tmi_data = TMI_data(data, T=300, t=1.0)
+    sofa_data = SOFA_data(data, T=300, t=1.0)
 
     # Print the metrics results
-    print(tmi_data.metrics)
+    print(sofa_data.metrics)
 
     # Generate data for C1, C2 and C3
     C1 = tmi_data.c1
@@ -161,4 +161,4 @@ if __name__ == '__main__':
     C3 = tmi_data.c3
 
     # Save the data
-    tmi_data.save_data(C1, 'test_TMI_data_C1')
+    tmi_data.save_data(C1, 'test_data_C1')
