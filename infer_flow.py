@@ -40,7 +40,7 @@ if __name__ == '__main__':
     DATA_PATH = args.DATA_PATH # DATA_PATH = '/home/emilia/DATASETS/Vident-real-100'
     SPLIT = args.SPLIT # SPLIT = 'test'
     IMAGE_DIR = args.IMAGE_DIR # IMAGE_DIR = 'GT'
-    MODELS = [args.MODEL] # MODELS = ['GMA_Step4_50_50_MIX']
+    MODELS = [args.MODEL] # MODELS = ['GMA_Step4']
     models = loadModels(args, [args.MODEL], DEVICE)
 
     data_seq = glob.glob(os.path.join(DATA_PATH, SPLIT, '*'))
@@ -74,8 +74,8 @@ if __name__ == '__main__':
         print('SOFA_data created ', seq)
         sofa_data = SOFA_data(data=infer_data_seq, model=args.MODEL, T=300, t=1.0)
 
-        print('Selecting frames C1...')
-        C1 = sofa_data.C1()
+        print('Selected frames C1...')
+        C1 = sofa_data.c1
 
         print('Saving SOFA_data...')
         sofa_data.save_data(C1, args.SAVE_DATASET_DIR)
