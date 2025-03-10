@@ -17,19 +17,22 @@ def load_image(imfile):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
     parser.add_argument('--DEVICE', help="device", default='cuda')
     parser.add_argument('--MODEL', help="restore checkpoint", default='checkpoints/RAFT_Sintel.pth')
     parser.add_argument('--DATA_PATH', help="data path", default='/home/emilia/DATASETS/Vident-real-100')
     parser.add_argument('--SPLIT', help="split", default='test')
     parser.add_argument('--IMAGE_DIR', help="image dir", default='GT')
     parser.add_argument('--SAVE_DATASET_DIR', help="save dataset", default='test_data_C1')
+    parser.add_argument('--C', help="C", default='C1')
+    parser.add_argument('--T', help="T", default=300, type=int)
+    parser.add_argument('--t', help="t", default=1.0, type=float)
+    parser.add_argument('--save_data', help="Save dataset", default='True')
+    parser.add_argument('--save_plots', help="Save plots", default='True')
 
 
     parser.add_argument('--small', action='store_true', help='use small model')
     parser.add_argument('--mixed_precision', action='store_true', help='use mixed precision')
     parser.add_argument('--alternate_corr', action='store_true', help='use efficent correlation implementation')
-
     parser.add_argument('--num_heads', default=1, type=int, help='number of heads in attention and aggregation')
     parser.add_argument('--position_only', default=False, action='store_true', help='only use position-wise attention')
     parser.add_argument('--position_and_content', default=False, action='store_true', help='use position and content-wise attention')
@@ -72,13 +75,25 @@ if __name__ == '__main__':
             'OF21': flow_b.permute(0, 2, 3, 1).cpu().numpy().astype(np.float32)})
 
         print('SOFA_data created ', seq)
-        sofa_data = SOFA_data(data=infer_data_seq, model=args.MODEL, T=300, t=1.0)
+        sofa_data = SOFA_data(data=infer_data_seq, model=args.MODEL, T=args.T, t=args.t)
 
-        print('Selected frames C1...')
-        C1 = sofa_data.c1
+        if args.C == 'C1':
+            print('Selected frames C1...')
+            C = sofa_data.c1
 
-        print('Saving SOFA_data...')
-        sofa_data.save_data(C1, args.SAVE_DATASET_DIR)
+        elif args.C == 'C2':
+            print('Selected frames C2...')
+            C = sofa_data.c2
 
-        print('Plotting metrics...')
-        sofa_data.plot_metrics(sofa_data.metrics, f'{args.SAVE_DATASET_DIR}/plot_{seq.split("/")[-1]}.png')
+        elif args.C == 'C3':
+            print('Selected frames C3...')
+            C = sofa_data.c3
+
+        if args.save_data:
+            print('Saving SOFA_data...')
+            sofa_data.save_data(C, args.SAVE_DATASET_DIR)
+
+        if args.save_plots:
+            print('Plotting metrics...')
+            sofa_data.plot_metrics(sofa_data.metrics, f'{args.SAVE_DATASET_DIR}/plot_{seq.split("/")[-1]}.png')
+
