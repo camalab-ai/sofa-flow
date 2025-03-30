@@ -1,4 +1,4 @@
-# sofa-flow: Streamed optical flow adaptation from synthetic to real dental scenes
+# Streamed optical flow adaptation from synthetic to real dental scenes
 
 
 > __Streamed optical flow adaptation from synthetic to real dental scenes__  
